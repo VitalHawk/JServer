@@ -5,32 +5,19 @@ var fs = require('fs');
 
 var server = new http.createServer(
         function(req, res) {
-            //req.
-            //console.log(req);
-            //console.log(res);
             var p_url = url.parse(req.url, true);
+            fname = p_url.pathname;
 
-            var fname = p_url.pathname;
-            
-            if ('/data' == fname) {
-                res.end('Result from the server: ' + p_url.query.inp.toUpperCase());
-                return;
-            }
-            
-            if ('/processdata' == fname) {
-                res.end(p_url.query.data.split("").reverse().join(""));
-                return;
-            }
-            
-            fs.readFile('public' + fname, 'utf8', 
+            if ('/data' === fname)
+                return res.end('Result from the server: ' + p_url.query.inp.toUpperCase());
+            else if ('/processdata' === fname)
+                return res.end(p_url.query.data.split("").reverse().join(""));
+
+            fs.readFile('public' + (fname === '/' ? '/index.html' : fname), 'utf8', 
                 function(err, data) { 
-                    if (err)
-                        res.end(util.inspect(err));
-                    else
-                        res.end(data);
+                    res.end(err ? util.inspect(err) : data);
                 }
                         );
-            //res.end( util.inspect(url.parse(req.url, true)) );
         });
         
 server.start = function() {
@@ -39,7 +26,4 @@ server.start = function() {
 
 module.exports = server;
         
-//server.listen(9090);
-//
-
 //require('http').createServer(function(req, res) { res.end('Hello, vit'); }).listen(9090);
