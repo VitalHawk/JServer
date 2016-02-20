@@ -6,7 +6,7 @@ var fs = require('fs');
 var server = new http.createServer(
         function(req, res) {
             var p_url = url.parse(req.url, true);
-            fname = p_url.pathname;
+            var fname = p_url.pathname;
 
             if ('/data' === fname)
                 return res.end('Result from the server: ' + p_url.query.inp.toUpperCase());
