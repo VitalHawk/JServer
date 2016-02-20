@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+
+        
+<script>
+$(
+    function() {
+        $('#btn').click(query);
+    }
+);
+
+function query(evt) {
+    $.ajax('data?inp=' + $('#inp').val())
+            .done(update)
+            .error(bad);
+}
+
+function update(res) {
+    $.ajax('processdata?data=' + res)
+            .done(update2)
+            .error(bad);
+}
+
+function update2(res) {
+    $('#res').text(res);
+}
+
+function bad(jqXHR, textStatus, errorThrown) {
+    $('#res').text(errorThrown);
+}
+
+
+</script>
+        
+    </head>
+    <body>
+        <input type="text" id="inp" />
+        <button id="btn">Click</button>
+        <div id="res">Result!!!</div>        
+    </body>
+</html>
