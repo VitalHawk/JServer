@@ -11,20 +11,17 @@
 <script>
 $(
     function() {
-        $('#btn').click(query);
+        $('#btn').click(proQuery);
     }
 );
 
 function query(evt) {
-    $.ajax('data?inp=' + $('#inp').val())
-            .done(update)
-            .error(bad);
+    var htq = $.ajax('data?inp=' + $('#inp').val());
+    htq.done(update).error(bad);
 }
 
 function update(res) {
-    $.ajax('processdata?data=' + res)
-            .done(update2)
-            .error(bad);
+    $.ajax('processdata?data=' + res).done(update2).error(bad);
 }
 
 function update2(res) {
@@ -36,19 +33,15 @@ function bad(jqXHR, textStatus, errorThrown) {
 }
 
 function promiseGet(url) {
-    return new Promise(
-            function(resolve, reject) {
-                $.ajax(url).done(resolve).error(reject);
-            }
-                    );
+    return new Promise( (resolve, reject) => { $.ajax(url).done(resolve).error(reject); } );
 }
 
 function proQuery() {
     promiseGet('data?inp=' + $('#inp').val())
-            .then( function(res) { return promiseGet('processdata?data=' + res); } )
-            .then( function(res) { $('#res').text(res); return res; } )
-            .then( function(res) { $('<h3/>').text(res).appendTo("body"); return res; })
-            .catch( function(err) { alert(err); } );
+            .then( res => { $('<h3/>').text(res).appendTo("body"); return res; })
+            .then( res => { return promiseGet('processdata?data=' + res); } )
+            .then( res => { $('#res').text(res); return res; } )
+            .catch( err => { alert(err); } );
 }
 
 </script>
