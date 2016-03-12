@@ -37,11 +37,15 @@ function promiseGet(url) {
 }
 
 function proQuery() {
-    promiseGet('data?inp=' + $('#inp').val())
-            .then( res => { $('<h3/>').text(res).appendTo("body"); return res; })
-            .then( res => { return promiseGet('processdata?data=' + res); } )
-            .then( res => { $('#res').text(res); return res; } )
-            .catch( err => { alert(err); } );
+    var inp = $('#inp').val();
+    promiseGet('data?inp=' + inp)
+        .then( res => { $('h3').remove(); return res;} )
+        .then( res => { $('<h3/>').text(inp + ' >>>').appendTo("body"); return res; } )
+        .then( res => { $('<h3/>').text(res + ' >>>').appendTo("body"); return res; } )
+        .then( res => { return promiseGet('processdata?data=' + res); } )
+        .then( res => { return $('#res').text(res).text(); } )
+        .then( res => { $('<h3/>').text(res).appendTo("body").text(); return res; } )
+        .catch( err => { alert(err); } );
 }
 
 </script>
